@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -29,17 +32,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
+import br.com.fiap.saudeplena.R
 import br.com.fiap.saudeplena.ui.theme.SaudePlenaTheme
 
 @Composable
 fun LoginScreen (navController: NavController) {
-    //LoginTopHeader()
-    LoginBody()
+    Column(
+        verticalArrangement = Arrangement.spacedBy(32.dp)
+    ) {
+        LoginTopHeader()
+        LoginBody()
+    }
 }
 
 
-/*
 @Composable
 fun LoginTopHeader() {
     val image = painterResource(R.drawable.plus)
@@ -79,51 +92,166 @@ fun LoginTopHeader() {
         }
     }
 }
-*/
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginBody() {
 
-    var textFieldValue = remember {
+    var emailValue = remember {
         mutableStateOf("")
     }
+
+    var senhaValue = remember {
+        mutableStateOf("")
+    }
+
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
     ){
         Column(
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ){
-                Text(
-                    text = "Email",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFFFFFF)
-                )
+            Input(
+                label = "Email",
+                value = emailValue.value,
+                onChange = { value -> emailValue.value = value }
+            )
 
-                TextField(
-                    value = textFieldValue.value,
+            Input(
+                label = "Senha",
+                value = senhaValue.value,
+                onChange = { value -> senhaValue.value = value },
+                type = "password"
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Input(
+    label:String,
+    value:String,
+    onChange:(value:String) -> Unit,
+    type: String = ""
+){
+
+    var inputIsFocused = remember {
+        mutableStateOf("")
+    }
+
+    var password = remember {
+        mutableStateOf("")
+    }
+    var passwordVisible : Boolean by remember{
+        mutableStateOf(false)
+    }
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ){
+        Text(
+            text = label,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFFFFFFFF)
+        )
+        OutlinedTextFieldBackground(
+            Color(0xFF131A30),
+            isFocused = inputIsFocused.value == "Active"
+        ) {
+            if(type === "password"){
+                OutlinedTextField(
+                    value = value,
                     onValueChange = { value ->
-                        textFieldValue.value = value
+                        onChange(value)
                     },
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFF131A30)),
+                        .onFocusChanged { state ->
+                            inputIsFocused.value = state.toString()
+                        },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.White,
                         cursorColor = Color.White,
                         focusedIndicatorColor = Color(0xFF0E52C7),
-                        placeholderColor = Color.Gray,
+                        containerColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        IconButton(onClick = {
+                            passwordVisible = !passwordVisible
+                        }) {
+                            Image(painter = painterResource(R.drawable.plus),
+                                contentDescription = null,
+                                Modifier
+                                    .height(10.dp)
+                                    .width(10.dp))
+                        }
+                    }
+                )
+            }else {
+                OutlinedTextField(
+                    value = value,
+                    onValueChange = { value ->
+                        onChange(value)
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged { state ->
+                            inputIsFocused.value = state.toString()
+                        },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.White,
+                        cursorColor = Color.White,
+                        focusedIndicatorColor = Color(0xFF0E52C7),
+                        containerColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
                     )
                 )
             }
         }
+    }
+}
+@Composable
+fun OutlinedTextFieldBackground(
+    color: Color,
+    isFocused: Boolean,
+    content: @Composable () -> Unit
+) {
+
+    var boxModifier = Modifier
+        .padding(top = 8.dp)
+        .background(
+            color,
+            shape = RoundedCornerShape(5.dp)
+        )
+
+    if (isFocused){
+        boxModifier = Modifier
+            .shadow(
+                elevation = 10.dp,
+                shape = RoundedCornerShape(8.dp),
+                ambientColor = Color(0xFF0E52C7),
+                spotColor = Color(0xFF0E52C7),
+            )
+            .background(
+                color,
+                shape = RoundedCornerShape(5.dp)
+            )
+    }
+
+    Box {
+        Box(
+            modifier = boxModifier.matchParentSize()
+        )
+        content()
     }
 }
