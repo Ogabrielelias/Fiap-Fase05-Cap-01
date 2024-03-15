@@ -1,24 +1,30 @@
 package br.com.fiap.saudeplena.screens
 
+import android.text.TextUtils
+import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +46,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
 import br.com.fiap.saudeplena.R
-import br.com.fiap.saudeplena.ui.theme.SaudePlenaTheme
 
 @Composable
 fun LoginScreen (navController: NavController) {
@@ -49,9 +54,53 @@ fun LoginScreen (navController: NavController) {
     ) {
         LoginTopHeader()
         LoginBody()
+
+        val openAlertDialog = remember { mutableStateOf(true) }
+
+        when {
+            openAlertDialog.value -> {
+                AlertDialog(
+                    title = {
+                        Text(
+                            text = "Conta de testes!" ,
+                            color = Color.Blue,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    },
+                    text = {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = "E-mail: admin@fiap.com.br",
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 20.sp
+                            )
+
+                            Text(
+                                text = "Senha: admin123",
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 20.sp
+                            )
+                        }
+                    },
+                    onDismissRequest = {
+
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                openAlertDialog.value = false
+                            }
+                        ) {
+                            Text("Ok")
+                        }
+                    },
+                )
+            }
+        }
     }
 }
-
 
 @Composable
 fun LoginTopHeader() {
@@ -60,7 +109,7 @@ fun LoginTopHeader() {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(240.dp),
+                .height(200.dp),
             color = Color(0xFF222D48),
             shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp),
         ){
@@ -88,14 +137,69 @@ fun LoginTopHeader() {
                     )
                 }
             }
-
         }
     }
+}
+
+fun validateLoginInputs (email:String, senha:String) : Boolean {
+    println(!TextUtils.isEmpty(email) &&
+            Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+            senha.length >= 8)
+    if(
+        !TextUtils.isEmpty(email) &&
+        Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+        senha.length >= 8
+        ) return true
+
+    return false
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginBody() {
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+    ){
+        Column(
+            verticalArrangement = Arrangement.spacedBy(32.dp)
+        ) {
+
+            FormLogin(onSend = {email, senha ->
+
+            })
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.4f)
+                        .height(2.dp)
+                        .background(Color(0xFF131A30))
+                ){}
+                Text("Ou", color = Color.White)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(1f)
+                        .height(2.dp)
+                        .background(Color(0xFF131A30))
+                ){}
+            }
+        }
+    }
+}
+
+@Composable
+fun FormLogin(
+    onSend:(email:String, senha:String) -> Unit,
+    error:Boolean = false
+){
+
+    val buttonDisabled = remember { mutableStateOf(true) }
 
     var emailValue = remember {
         mutableStateOf("")
@@ -105,27 +209,56 @@ fun LoginBody() {
         mutableStateOf("")
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)
-    ){
-        Column(
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            Input(
-                label = "Email",
-                value = emailValue.value,
-                onChange = { value -> emailValue.value = value }
-            )
 
-            Input(
-                label = "Senha",
-                value = senhaValue.value,
-                onChange = { value -> senhaValue.value = value },
-                type = "password"
-            )
-        }
+    Column (
+        verticalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
+        Input(
+            label = "Email",
+            value = emailValue.value,
+            onChange = { value ->
+                emailValue.value = value
+                buttonDisabled.value = !validateLoginInputs(
+                    value,
+                    senhaValue.value
+                )
+                       },
+            frontImage = R.drawable.mail,
+            isError = error
+        )
+
+        Input(
+            label = "Senha",
+            value = senhaValue.value,
+            onChange = { value ->
+                senhaValue.value = value
+                buttonDisabled.value = !validateLoginInputs(
+                    emailValue.value,
+                    value
+                )
+                       },
+            type = "password",
+            frontImage = R.drawable.lock,
+            isError = error
+        )
+    }
+
+    Button(
+        enabled = !buttonDisabled.value,
+        onClick = { -> onSend(emailValue.value, senhaValue.value)},
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding= PaddingValues(16.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0XFF0D65FB),
+            disabledContainerColor = Color(0XFF162A4D)
+        )
+    ){
+        Text(
+            "Continuar  ➔",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.SemiBold
+        )
     }
 }
 
@@ -135,7 +268,9 @@ fun Input(
     label:String,
     value:String,
     onChange:(value:String) -> Unit,
-    type: String = ""
+    type: String = "",
+    frontImage:Int,
+    isError: Boolean = false
 ){
 
     var inputIsFocused = remember {
@@ -169,6 +304,7 @@ fun Input(
                         onChange(value)
                     },
                     shape = RoundedCornerShape(10.dp),
+                    isError=isError,
                     modifier = Modifier
                         .fillMaxWidth()
                         .onFocusChanged { state ->
@@ -183,15 +319,28 @@ fun Input(
                         unfocusedIndicatorColor = Color.Transparent
                     ),
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    leadingIcon = {
+                        Image(
+                        painter = painterResource(frontImage),
+                        contentDescription = null,
+                        Modifier
+                            .size(24.dp)
+                        )
+                                  },
                     trailingIcon = {
-                        IconButton(onClick = {
+                        IconButton(
+                            onClick = {
                             passwordVisible = !passwordVisible
-                        }) {
-                            Image(painter = painterResource(R.drawable.plus),
+                            }
+                        ) {
+                            var image = R.drawable.eye
+                            if(passwordVisible) image = R.drawable.eyeoff
+                            Image(
+                                painter = painterResource(image),
                                 contentDescription = null,
                                 Modifier
-                                    .height(10.dp)
-                                    .width(10.dp))
+                                    .size(32.dp)
+                            )
                         }
                     }
                 )
@@ -201,6 +350,7 @@ fun Input(
                     onValueChange = { value ->
                         onChange(value)
                     },
+                    isError = isError,
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -208,6 +358,14 @@ fun Input(
                             inputIsFocused.value = state.toString()
                         },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    leadingIcon = {
+                        Image(
+                            painter = painterResource(frontImage),
+                            contentDescription = null,
+                            Modifier
+                                .size(24.dp)
+                        )
+                    },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.White,
                         cursorColor = Color.White,
@@ -228,7 +386,6 @@ fun OutlinedTextFieldBackground(
 ) {
 
     var boxModifier = Modifier
-        .padding(top = 8.dp)
         .background(
             color,
             shape = RoundedCornerShape(5.dp)
