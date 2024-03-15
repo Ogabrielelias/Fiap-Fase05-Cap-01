@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.fiap.saudeplena.screens.LoginScreen
+import br.com.fiap.saudeplena.screens.RegisterScreen
 import br.com.fiap.saudeplena.ui.theme.SaudePlenaTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = "login"
                     ) {
                         composable(route = "login") { LoginScreen(navController) }
+                        composable(route = "register") { RegisterScreen(navController) }
                     }
                 }
             }
