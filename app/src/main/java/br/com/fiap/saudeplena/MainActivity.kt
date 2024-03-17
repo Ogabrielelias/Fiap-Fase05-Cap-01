@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import br.com.fiap.saudeplena.screens.HeartbeatScreen
 import br.com.fiap.saudeplena.screens.LoginScreen
 import br.com.fiap.saudeplena.ui.theme.SaudePlenaTheme
 
@@ -26,9 +27,10 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = "login"
+                        startDestination = "heartbeat"
                     ) {
                         composable(route = "login") { LoginScreen(navController) }
+                        composable(route = "heartbeat") { HeartbeatScreen(navController) }
                     }
                 }
             }

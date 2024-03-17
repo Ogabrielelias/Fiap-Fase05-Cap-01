@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -36,6 +37,13 @@ import br.com.fiap.saudeplena.ui.theme.SaudePlenaTheme
 fun LoginScreen (navController: NavController) {
     //LoginTopHeader()
     LoginBody()
+    Button(
+        onClick = {
+            navController.navigate("heartbeat")
+        }
+    ) {
+        Text(text = "Login")
+    }
 }
 
 
