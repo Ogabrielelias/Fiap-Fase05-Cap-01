@@ -57,7 +57,7 @@ fun TabNavigationScreen(navController: NavHostController) {
                         .padding(all = 16.dp),
                 ) {
                     Tab(
-                        selected = currentTab == 0,
+                        selected = currentRoute == "activity",
                         onClick = { navController.navigate("activity"); currentTab = 0 },
                         text = {
                             Icon(
@@ -69,7 +69,7 @@ fun TabNavigationScreen(navController: NavHostController) {
                         }
                     )
                     Tab(
-                        selected = currentTab == 1,
+                        selected = currentRoute == "heartbeat",
                         onClick = { navController.navigate("heartbeat"); currentTab = 1 },
                         text = {
                             Icon(
@@ -88,7 +88,7 @@ fun TabNavigationScreen(navController: NavHostController) {
             composable("login") { LoginScreen(navController = navController) }
             composable("register") { RegisterScreen(navController = navController) }
             composable("heartbeat") { HeartbeatScreen(navController = navController) }
-            composable("activity") { HeartbeatScreen(navController = navController) }
+            composable("activity") { ActivityScreen(navController = navController) }
         }
     }
 }

@@ -3,12 +3,14 @@ package br.com.fiap.saudeplena.screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,11 +21,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -47,13 +52,13 @@ import br.com.fiap.saudeplena.ui.theme.Red80
 
 @Composable
 fun HeartbeatScreen (navController: NavController) {
-    HeartbeatBody()
+    HeartbeatBody(navController)
 }
 
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HeartbeatBody() {
+fun HeartbeatBody(navController: NavController) {
     val scrollState = rememberScrollState()
     val scrollState2 = rememberScrollState()
         FlexColumnLayout{
@@ -62,14 +67,20 @@ fun HeartbeatBody() {
                 .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start,) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Seta para a esquerda",
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .size(26.dp),
-                    tint = Color.White
-                )
+                Button(
+                    onClick = { navController.navigate("login") },
+                    contentPadding = PaddingValues(0.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Seta para a esquerda",
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .size(26.dp),
+                        tint = Color.White
+                    )
+                }
                 TextFun(text = "Batimentos Cardíacos", size = 28.sp)
             }
             Row(
@@ -236,7 +247,8 @@ fun HeartbeatBody() {
 fun FlexColumnLayout(content: @Composable ColumnScope.() -> Unit) {
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
         content = content
