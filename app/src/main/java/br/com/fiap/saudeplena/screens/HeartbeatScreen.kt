@@ -1,5 +1,6 @@
 package br.com.fiap.saudeplena.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -49,176 +50,178 @@ fun HeartbeatScreen (navController: NavController) {
     HeartbeatBody()
 }
 
+@SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeartbeatBody() {
     val scrollState = rememberScrollState()
     val scrollState2 = rememberScrollState()
-    FlexColumnLayout{
-        Row ( modifier = Modifier
-            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-            .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-            contentDescription = "Seta para a esquerda",
-            modifier = Modifier
-                .padding(end = 8.dp)
-                .size(26.dp),
-            tint = Color.White
-            )
-            TextFun(text = "Batimentos Cardíacos", size = 28.sp)
-        }
-        Row(
-            modifier = Modifier
+        FlexColumnLayout{
+            Row ( modifier = Modifier
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-        ){
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(50.dp)
-                    .background(Red80, RoundedCornerShape(16.dp))
-                    .fillMaxSize()
-            ) {
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,) {
                 Icon(
-                    imageVector = Icons.Default.Favorite,
-                    contentDescription = "Heart Icon",
-                    tint = Red40,
-                    modifier = Modifier.size(25.dp)
-                )
-            }
-            TextFun("95", 100.sp)
-            TextFun("BPM", 35.sp, Gray50)
-        }
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-        ){
-            BoxWithConstraints(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Blue70, RoundedCornerShape(16.dp))
-            ) {
-                Surface(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Seta para a esquerda",
                     modifier = Modifier
-                        .width(maxWidth)
-                        .height(100.dp)
-                        .horizontalScroll(scrollState)
-                        .padding(16.dp)
-                        .background(Blue70),
+                        .padding(end = 8.dp)
+                        .size(26.dp),
+                    tint = Color.White
+                )
+                TextFun(text = "Batimentos Cardíacos", size = 28.sp)
+            }
+            Row(
+                modifier = Modifier
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ){
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(50.dp)
+                        .background(Red80, RoundedCornerShape(16.dp))
+                        .fillMaxSize()
                 ) {
-                    Box(
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = "Heart Icon",
+                        tint = Red40,
+                        modifier = Modifier.size(25.dp)
+                    )
+                }
+                TextFun("95", 100.sp)
+                TextFun("BPM", 35.sp, Gray50)
+            }
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ){
+                BoxWithConstraints(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Blue70, RoundedCornerShape(16.dp))
+                ) {
+                    Surface(
                         modifier = Modifier
-                            .fillMaxSize()
+                            .width(maxWidth)
+                            .height(100.dp)
+                            .horizontalScroll(scrollState)
+                            .padding(16.dp)
                             .background(Blue70),
-                        contentAlignment = Alignment.Center
                     ) {
-                        Row(
+                        Box(
                             modifier = Modifier
-                                .background(Blue70)
-                                .align(Alignment.CenterStart),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                .fillMaxSize()
+                                .background(Blue70),
+                            contentAlignment = Alignment.Center
                         ) {
-                            RoundedBoxWithText("1 Dia")
-                            RoundedBoxWithText("1 Semana")
-                            RoundedBoxWithText("1 Mês")
-                            RoundedBoxWithText("Todos")
+                            Row(
+                                modifier = Modifier
+                                    .background(Blue70)
+                                    .align(Alignment.CenterStart),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                RoundedBoxWithText("1 Dia")
+                                RoundedBoxWithText("1 Semana")
+                                RoundedBoxWithText("1 Mês")
+                                RoundedBoxWithText("Todos")
+                            }
                         }
                     }
                 }
             }
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.heartbeat_graphic),
-                contentDescription = "grafico de batimentos cardiacos"
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-        ){
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Blue60, RoundedCornerShape(16.dp))
-                    .align(Alignment.CenterVertically)
-                    .padding(16.dp),
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                Column {
-                    Row(
-                        modifier = Modifier
-                            .background(Blue60)
-                    ) {
-                        TextFun(text = "3 Alterações Cardíacas", size = 20.sp)
-                        Spacer(modifier = Modifier.weight(1f))
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Config Icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(25.dp)
-                        )
-                        Spacer(modifier = Modifier.width(16.dp))
-                        Icon(
-                            imageVector = Icons.Default.Phone,
-                            contentDescription = "Telephone Icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(25.dp)
-                        )
-
-                    }
-                    BoxWithConstraints(
-                        modifier = Modifier
-                            .background(Blue60, RoundedCornerShape(16.dp))
-                    ) {
-                        Surface(
+                Image(
+                    painter = painterResource(id = R.drawable.heartbeat_graphic),
+                    contentDescription = "grafico de batimentos cardiacos"
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ){
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Blue60, RoundedCornerShape(16.dp))
+                        .align(Alignment.CenterVertically)
+                        .padding(16.dp),
+                ) {
+                    Column {
+                        Row(
                             modifier = Modifier
-                                .width(maxWidth)
-                                .height(maxHeight)
-                                .horizontalScroll(scrollState2)
-                                .padding(16.dp)
-                                .background(Blue60),
+                                .background(Blue60)
                         ) {
-                            Box(
+                            TextFun(text = "3 Alterações Cardíacas", size = 20.sp)
+                            Spacer(modifier = Modifier.weight(1f))
+                            Icon(
+                                imageVector = Icons.Default.Settings,
+                                contentDescription = "Config Icon",
+                                tint = Color.White,
+                                modifier = Modifier.size(25.dp)
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Icon(
+                                imageVector = Icons.Default.Phone,
+                                contentDescription = "Telephone Icon",
+                                tint = Color.White,
+                                modifier = Modifier.size(25.dp)
+                            )
+
+                        }
+                        BoxWithConstraints(
+                            modifier = Modifier
+                                .background(Blue60, RoundedCornerShape(16.dp))
+                        ) {
+                            Surface(
                                 modifier = Modifier
-                                    .fillMaxSize()
+                                    .width(maxWidth)
+                                    .height(maxHeight)
+                                    .horizontalScroll(scrollState2)
+                                    .padding(16.dp)
                                     .background(Blue60),
-                                contentAlignment = Alignment.TopStart
                             ) {
-                                Row(
+                                Box(
                                     modifier = Modifier
-                                        .background(Blue60)
-                                        .align(Alignment.CenterStart),
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                        .fillMaxSize()
+                                        .background(Blue60),
+                                    contentAlignment = Alignment.TopStart
                                 ) {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.graphic),
-                                        contentDescription = "grafico de batimentos cardiacos",
-                                        modifier = Modifier.size(200.dp)
-                                    )
-                                    Image(
-                                        painter = painterResource(id = R.drawable.graphic_danger),
-                                        contentDescription = "grafico de batimentos cardiacos",
-                                        modifier = Modifier.size(200.dp)
-                                    )
-                                    Image(
-                                        painter = painterResource(id = R.drawable.graphic),
-                                        contentDescription = "grafico de batimentos cardiacos",
-                                        modifier = Modifier.size(200.dp)
-                                    )
+                                    Row(
+                                        modifier = Modifier
+                                            .background(Blue60)
+                                            .align(Alignment.CenterStart),
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.graphic),
+                                            contentDescription = "grafico de batimentos cardiacos",
+                                            modifier = Modifier.size(200.dp)
+                                        )
+                                        Image(
+                                            painter = painterResource(id = R.drawable.graphic_danger),
+                                            contentDescription = "grafico de batimentos cardiacos",
+                                            modifier = Modifier.size(200.dp)
+                                        )
+                                        Image(
+                                            painter = painterResource(id = R.drawable.graphic),
+                                            contentDescription = "grafico de batimentos cardiacos",
+                                            modifier = Modifier.size(200.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -227,7 +230,7 @@ fun HeartbeatBody() {
             }
         }
     }
-}
+
 
 @Composable
 fun FlexColumnLayout(content: @Composable ColumnScope.() -> Unit) {
